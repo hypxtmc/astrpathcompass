@@ -75,7 +75,9 @@ TEXT_SCAN_TOOLS: dict[str, tuple[str, str]] = {
 _ABS_PATH_RE = re.compile(r"(?<![:/A-Za-z0-9_.])(?:/[A-Za-z0-9_.+~-]+){2,}")
 
 # 来源基础分（越精准越值得记录）：工具参数位 > shell 文本 > code 文本
-SOURCE_BASE = {"exact": 0.42, "shell": 0.32, "code": 0.28, "url": 0.20}
+# 来源置信度主导：工具明确传入的参数远可信于文本流扫描（磁盘上真实打开 > 出现于命令脚本 > URL 引用）。
+# exact/shell/code 档次差拉大，路径深度降为次要微调，避免"长得深就当回事"的凑分幻觉。
+SOURCE_BASE = {"exact": 0.60, "shell": 0.45, "code": 0.35, "url": 0.20}
 
 # 系统级前缀：命中则重罚（多为运行时代码路径，价值低）
 _SYS_PREFIX = (
@@ -87,17 +89,21 @@ _SYS_PREFIX = (
 def path_importance(path: str, source: str = "exact") -> float:
     """路径重要性评分（0.05~1.0）。
 
-    分数 = 来源基础分 + 深度加成 + 文件加成 - 系统路径罚分。
-    min_importance 阈值越高 → 只收深层/文件型/精准来源（冷门复杂）路径；
-    阈值越低 → 简单目录、高频浅路径也入册。
+    分数 = 来源置信度(主导，见 SOURCE_BASE) + 深度微调(每级+0.03,封顶8级)
+           + 文件加成(+0.12，带扩展名) − 系统路径罚分(−0.25)。
+    来源为主、深度为辅：工具参数明确传入(exact)≫shell 命令文本≫代码字符串出现≫URL 引用。
+    min_importance 阈值越高 → 只收高置信来源+深文件路径；阈值越低 → 浅层凑分也入册。
     """
-    base = SOURCE_BASE.get(source, 0.30)
+    base = SOURCE_BASE.get(source, 0.25)
     segs = [seg for seg in str(path).split("/") if seg and seg not in (".", "..")]
     depth = len(segs)
     name = segs[-1] if segs else ""
     has_ext = "." in name and not name.startswith(".")
     sys_pen = 0.25 if str(path).lower().startswith(_SYS_PREFIX) else 0.0
-    score = base + min(depth, 8) * 0.045 + (0.12 if has_ext else 0.0) - sys_pen
+    score = base + min(depth, 8) * 0.030 + (0.12 if has_ext else 0.0) - sys_pen
+    # 弱来源封顶：低置信度来源（如 url 引用）就算深度占满也压不过门槛，杜绝"长深凑分"越线
+    if base < 0.30:
+        score = min(score, base + 0.12)
     return round(max(0.05, min(1.0, score)), 3)
 
 

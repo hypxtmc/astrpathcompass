@@ -31,7 +31,7 @@ SWEEP_CRON = "17 * * * *"  # 每小时第 17 分，避开整点高峰
 
 
 @register("astrpathcompass", "hypxtmc", "路径罗盘：翻阅即记，检索直达，失效根治",
-          "v0.2.4", "https://github.com/hypxtmc/astrpathcompass")
+          "v0.2.5", "https://github.com/hypxtmc/astrpathcompass")
 class AstrPathCompass(Star):
     def __init__(self, context: Context, config: Any = None) -> None:
         super().__init__(context)

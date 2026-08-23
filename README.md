@@ -6,7 +6,7 @@ AstrPathCompass 为基于缓存的 LLM 会话提供**路径位点索引**:自动
 
 [![AstrBot](https://img.shields.io/badge/AstrBot-%3E%3D4.27-blue)](https://github.com/AstrBotDevs/AstrBot)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.10-blue)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/version-v0.2.4-blue)]()
+[![Version](https://img.shields.io/badge/version-v0.2.5-blue)]()
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
@@ -79,10 +79,13 @@ AstrPathCompass 为基于缓存的 LLM 会话提供**路径位点索引**:自动
 
 | 来源 | 说明 | 基础分 |
 |------|------|--------|
-| `exact` | 工具参数位(safe_read/file_*/db_query/rg_search 等白名单参数) | 0.42 |
-| `shell` | 从 `astrbot_execute_shell` 的 command 文本中提取的多级绝对路径 | 0.32 |
-| `code` | 从 `astrbot_execute_python` 的 code 文本中提取的多级绝对路径 | 0.28 |
-| `url` | URL 类工具(http_get/http_post/web_fetch)——当前不建档 | 0.20 |
+| `exact` | 工具参数位(safe_read/file_*/db_query/rg_search 等白名单参数)——磁盘上真实打开 | 0.60 |
+| `shell` | 从 `astrbot_execute_shell` 的 command 文本中提取的多级绝对路径 | 0.45 |
+| `code` | 从 `astrbot_execute_python` 的 code 文本中提取的多级绝对路径 | 0.35 |
+| `url` | URL 类工具(http_get/http_post/web_fetch)——弱来源封顶(0.20) | 0.20 |
+
+**来源置信度主导**:工具参数明确传入的动作(真打开文件)≫ shell 命令文本≫ 代码字符串出现 ≫ URL 引用。
+**弱来源封顶**:基础分 < 0.30 的来源(如 url)总分上限钉死在 `基础分+0.12`,哪怕路径深到 8 级也压不过 0.40 门槛——杜绝"长得深就当回事"的凑分幻觉。
 
 - **参数位优先**:白名单工具(`safe_read`、`file_*`、`db_query`、`rg_search`、`dir_*` 等 20+ 个)的 `path`/`filepath`/`db_path` 等参数直接取值,最权威
 - **文本扫描兜底**:shell 命令、Python 代码内部的多级绝对路径(`/a/b/c` 形态,至少两级)也会被正则识别。URL(`https://`、`ftp://`)与单级路径、相对路径不入册
@@ -93,21 +96,23 @@ AstrPathCompass 为基于缓存的 LLM 会话提供**路径位点索引**:自动
 每条候选路径先打一个「重要性分」(0.05~1.0),分数低于门槛则**不建档**:
 
 ```
-得分 = 来源基础分 + 深度加成(每级+0.045,封顶8级) + 文件加成(+0.12) − 系统路径罚分(−0.25)
+得分 = 来源置信度(主导) + 深度微调(每级+0.03,封顶8级) + 文件加成(+0.12) − 系统路径罚分(−0.25)
+弱来源(基础分<0.30, 如 url)总分再封顶: ≤ 基础分+0.12
 ```
 
 | 路径示例 | 来源 | 得分 |
 |----------|------|------|
-| `/path/to/AstrBot/data/plugins/astrpathcompass/main.py` (5级文件) | exact | 0.81 |
-| 同上 | shell | 0.71 |
-| `/path/to/AstrBot` (根目录) | shell | 0.41 |
-| `/usr/lib/python3.11/site-packages/requests` (系统库) | shell | 0.30 |
-| `/dev/null` (系统伪文件) | shell | 0.16 |
+| `/path/to/AstrBot/.../main.py` (深文件) | exact | 0.90 |
+| 同上 | shell | 0.75 |
+| 同上 | code | 0.65 |
+| `/etc/nginx/nginx.conf` (系统配置) | exact | 0.56 |
+| `/tmp/x` (浅+系统罚分) | shell | 0.26 |
+| `/path/to/proj/src/util.py` (深文件, 弱来源封顶) | url | 0.32 |
 
-**阈值手感**(手测对照):
-- `0.30`:连系统库路径和 `/dev/null` 都收——档案更大但噪音上涨
-- `0.40`:全真路径入册、噪声干净滤除(**默认,发布前实测甜点**)
-- `0.60`:连 `/path/to/AstrBot` 这种根锚点都丢掉,只留深层文件——过度精简
+**阈值手感**(新模型手测对照,门槛只拦新面孔,已建档不受影响):
+- `0.25`:低置信来源也能入册——档案大但噪音升
+- `0.40`:exact/shell/code 真实路径干净收录、弱来源(url)与浅层系统路径干净拒收(**默认**)
+- `0.60`:只留 exact 强来源 + 深文件——字段极精
 
 调大 → 档案更精(偏冷门复杂);调小 → 档案更全(简单高频也收)。
 
