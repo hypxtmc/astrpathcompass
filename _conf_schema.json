@@ -1,0 +1,32 @@
+{
+  "capture_enabled": {
+    "description": "自动捕获开关",
+    "type": "bool",
+    "default": true,
+    "hint": "关闭后工具调用的路径不再自动入账（存量记录仍可检索）。适合排查/调试时临时静音。"
+  },
+  "search_limit": {
+    "description": "检索结果上限",
+    "type": "int",
+    "default": 8,
+    "hint": "/pathsearch 单次返回的最大条数（1-20）。调大看得全，调小更聚焦。"
+  },
+  "sweep_enabled": {
+    "description": "存活巡检开关",
+    "type": "bool",
+    "default": true,
+    "hint": "每小时巡查一次档案中的路径是否仍存活，失效的标记为 ✗ 不影响检索但结果靠后。关闭则跳过巡检（适合路径频繁变动的场景）。"
+  },
+  "sweep_cron": {
+    "description": "巡检 cron 表达式",
+    "type": "string",
+    "default": "17 * * * *",
+    "hint": "APScheduler 标准 cron。默认每小时第 17 分执行，避开整点高峰。改这里即可调整巡检频率。"
+  },
+  "min_importance": {
+    "description": "建档重要度门槛",
+    "type": "float",
+    "default": 0.4,
+    "hint": "路径入册的最低重要度（0.05~1.0）。数值高→只收冷门复杂（深层文件/精准来源）路径；数值低→简单高频路径也收。调大档案更精，调小更全。"
+  }
+}

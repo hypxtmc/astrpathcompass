@@ -1,0 +1,5 @@
+name: astrpathcompass
+desc: 路径位点索引罗盘：自动捕获已翻过的文件路径，检索直达，失效校验，零上下文注入不破坏缓存
+version: v0.2.4
+author: hypxtmc
+repo: https://github.com/hypxtmc/astrpathcompass
