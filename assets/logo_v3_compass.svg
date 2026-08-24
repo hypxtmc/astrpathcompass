@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bgC" cx="38%" cy="32%" r="85%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#f2f9ff"/>
+      <stop offset="100%" stop-color="#e3f1fb"/>
+    </radialGradient>
+    <!-- 主针:朝 NE 的菱形针,上叶青→蓝,带高光 -->
+    <linearGradient id="roseTop" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00acc1"/>
+      <stop offset="55%" stop-color="#0288d1"/>
+      <stop offset="100%" stop-color="#01579b"/>
+    </linearGradient>
+    <linearGradient id="roseBot" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b3e0f7"/>
+      <stop offset="100%" stop-color="#e3f4ff"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="2.2" flood-color="#01579b" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <!-- 白底圆角 -->
+  <rect x="5" y="5" width="190" height="190" rx="44" fill="url(#bgC)"/>
+
+  <!-- 外刻度环 -->
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#b3d9f2" stroke-opacity="0.7" stroke-width="2"/>
+  <!-- 16 刻度:主方位长刻度深蓝,间刻度细浅蓝 -->
+  <g stroke-linecap="round">
+    <!-- N/E/S/W → 朝向 NE 的罗盘上,主位固定在 N 上方向 -->
+    <g stroke="#1565c0" stroke-width="3.6"><line x1="100" y1="14" x2="100" y2="26"/><line x1="100" y1="174" x2="100" y2="186"/><line x1="14" y1="100" x2="26" y2="100"/><line x1="174" y1="100" x2="186" y2="100"/></g>
+    <!-- 45° 间刻度 -->
+    <g stroke="#42a5f5" stroke-width="2.4" transform="rotate(45 100 100)"><line x1="100" y1="17" x2="100" y2="26"/><line x1="100" y1="174" x2="100" y2="183"/><line x1="17" y1="100" x2="26" y2="100"/><line x1="174" y1="100" x2="183" y2="100"/></g>
+    <!-- 22.5° 细刻度 -->
+    <g stroke="#90caf9" stroke-width="1.4" transform="rotate(22.5 100 100)"><line x1="100" y1="19" x2="100" y2="26"/><line x1="100" y1="174" x2="100" y2="181"/><line x1="19" y1="100" x2="26" y2="100"/><line x1="174" y1="100" x2="181" y2="100"/></g>
+    <g stroke="#90caf9" stroke-width="1.4" transform="rotate(67.5 100 100)"><line x1="100" y1="19" x2="100" y2="26"/><line x1="100" y1="174" x2="100" y2="181"/><line x1="19" y1="100" x2="26" y2="100"/><line x1="174" y1="100" x2="181" y2="100"/></g>
+  </g>
+
+  <!-- 内盘面 -->
+  <circle cx="100" cy="100" r="62" fill="#ffffff" fill-opacity="0.6" stroke="#7fc8ee" stroke-opacity="0.6" stroke-width="2"/>
+  <circle cx="100" cy="100" r="58" fill="none" stroke="#d7ecfa" stroke-width="0.8"/>
+
+  <!-- 十字参考轴(淡) -->
+  <g stroke="#a8d4ef" stroke-opacity="0.65" stroke-width="2.4" stroke-linecap="round">
+    <line x1="100" y1="42" x2="100" y2="74"/>
+    <line x1="100" y1="126" x2="100" y2="158"/>
+    <line x1="42"  y1="100" x2="74"  y2="100"/>
+    <line x1="126" y1="100" x2="158" y2="100"/>
+  </g>
+
+  <!-- 菱形罗盘针:上叶朝 NE(135→45° 方位),下叶反向 -->
+  <g filter="url(#shadow)">
+    <!-- 上叶(北东):指向 NE -->
+    <polygon points="100,100 130,74 133,88 100,100" fill="url(#roseTop)"/>
+    <polygon points="100,100 137,91 130,74 124,81 100,100" fill="url(#roseTop)"/>
+    <!-- 下叶(南西):淡,反方向 -->
+    <polygon points="100,100 70,126 67,112 100,100" fill="url(#roseBot)" stroke="#9cc8e4" stroke-opacity="0.4" stroke-width="0.6"/>
+    <polygon points="100,100 63,109 70,126 76,119 100,100" fill="url(#roseBot)" stroke="#9cc8e4" stroke-opacity="0.4" stroke-width="0.6"/>
+  </g>
+
+  <!-- 针尖高光 + 枢轴 -->
+  <polygon points="142,92 139.5,80 133,88 139,94" fill="#8ff4ff" opacity="0.85"/>
+  <circle cx="129" cy="73" r="5" fill="#4dd8f0" opacity="0.9"/>
+  <circle cx="100" cy="100" r="11" fill="#e8f6ff" stroke="#155e9c" stroke-width="2.6"/>
+  <circle cx="100" cy="100" r="4" fill="#0288d1"/>
+</svg>
