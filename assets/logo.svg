@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="bgGrad" cx="42%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#251b52"/>
+      <stop offset="55%" stop-color="#171040"/>
+      <stop offset="100%" stop-color="#0b0721"/>
+    </radialGradient>
+    <linearGradient id="needleGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7a4bff"/>
+      <stop offset="100%" stop-color="#35e0ff"/>
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3d2f8f"/>
+      <stop offset="100%" stop-color="#2a1f6b"/>
+    </linearGradient>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="dotGlow" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="190" height="190" rx="40" fill="url(#bgGrad)"/>
+  <rect x="12" y="12" width="176" height="176" rx="34" fill="none" stroke="#4a3aa8" stroke-opacity="0.35" stroke-width="1.5"/>
+  <g stroke="#5748b8" stroke-opacity="0.65" stroke-width="2" stroke-linecap="round">
+    <line x1="100" y1="30"  x2="100" y2="38"/><line x1="100" y1="162" x2="100" y2="170"/>
+    <line x1="30"  y1="100" x2="38"  y2="100"/><line x1="162" y1="100" x2="170" y2="100"/>
+  </g>
+  <g stroke="#453a8f" stroke-opacity="0.5" stroke-width="1.6" stroke-linecap="round" transform="rotate(30 100 100)">
+    <line x1="100" y1="33" x2="100" y2="39"/><line x1="100" y1="161" x2="100" y2="167"/>
+    <line x1="33"  y1="100" x2="39"  y2="100"/><line x1="161" y1="100" x2="167" y2="100"/>
+  </g>
+  <g stroke="#453a8f" stroke-opacity="0.28" stroke-width="1.3" stroke-linecap="round" transform="rotate(60 100 100)">
+    <line x1="100" y1="35" x2="100" y2="40"/><line x1="100" y1="160" x2="100" y2="165"/>
+    <line x1="35"  y1="100" x2="40"  y2="100"/><line x1="160" y1="100" x2="165" y2="100"/>
+  </g>
+  <circle cx="100" cy="100" r="64" fill="none" stroke="url(#ringGrad)" stroke-width="6"/>
+  <circle cx="100" cy="100" r="52" fill="none" stroke="#4a3aa8" stroke-opacity="0.4" stroke-width="1.8"/>
+  <g stroke="#705ed0" stroke-opacity="0.5" stroke-width="3" stroke-linecap="round">
+    <line x1="100" y1="46"  x2="100" y2="70"/><line x1="100" y1="130" x2="100" y2="154"/>
+    <line x1="46"  y1="100" x2="70"  y2="100"/><line x1="130" y1="100" x2="154" y2="100"/>
+  </g>
+  <g filter="url(#softGlow)">
+    <polygon points="100,100 141,76 141,88 129,94 129,100" fill="url(#needleGrad)" opacity="0.92"/>
+    <polygon points="132,100 141,76 138.5,73.5" fill="#8ff3ff" opacity="0.9"/>
+  </g>
+  <circle cx="141" cy="76" r="6.2" fill="#35e0ff" filter="url(#dotGlow)"/>
+  <circle cx="141" cy="76" r="2.4" fill="#eafeff"/>
+  <circle cx="122.5" cy="53" r="2.6" fill="#35e0ff" opacity="0.85" filter="url(#dotGlow)"/>
+  <circle cx="100" cy="100" r="9" fill="#15102f" stroke="#7a4bff" stroke-opacity="0.8" stroke-width="2"/>
+  <circle cx="100" cy="100" r="3.6" fill="#a78bff"/>
+</svg>
