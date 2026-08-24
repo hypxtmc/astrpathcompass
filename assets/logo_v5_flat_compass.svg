@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 200 200">
+  <!-- 白底圆卡,扁平无渐变 -->
+  <rect x="5" y="5" width="190" height="190" rx="44" fill="#ffffff" stroke="#d9e9f7" stroke-width="1.5"/>
+
+  <!-- 主表环 -->
+  <circle cx="100" cy="100" r="79" fill="#ffffff" stroke="#0e5a8f" stroke-width="3.4"/>
+  <!-- 内辅助细环(轻微,不抢视线) -->
+  <circle cx="100" cy="100" r="72" fill="none" stroke="#86b7d9" stroke-width="1"/>
+
+  <!-- 四主方位刻度:深蓝,细长 -->
+  <g stroke="#0e5a8f" stroke-linecap="round">
+    <line x1="100" y1="24" x2="100" y2="33" stroke-width="3.2"/>
+    <line x1="100" y1="167" x2="100" y2="176" stroke-width="3.2"/>
+    <line x1="24" y1="100" x2="33" y2="100" stroke-width="3.2"/>
+    <line x1="167" y1="100" x2="176" y2="100" stroke-width="3.2"/>
+  </g>
+
+  <!-- N 标识 -->
+  <text x="100" y="19" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="bold" fill="#0e5a8f">N</text>
+
+  <!-- 菱形罗盘针:整体绕中心转45°,头朝 NE,尾朝 SW -->
+  <!-- 头叶(青):NE 半边 -->
+  <polygon points="131.1,68.9 92.0,92.0 108.0,108.0" fill="#10b3d8"/>
+  <!-- 尾叶(白+青描边):SW 半边 -->
+  <polygon points="81.6,118.4 92.0,92.0 108.0,108.0" fill="#eaf7fd" stroke="#10b3d8" stroke-width="2"/>
+
+  <!-- 中心铆点 -->
+  <circle cx="100" cy="100" r="5.5" fill="#ffffff" stroke="#0e5a8f" stroke-width="2.6"/>
+</svg>
